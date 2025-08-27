@@ -18,7 +18,7 @@ on:
       target:
         description: "Select the main Dart file to build"
         type: choice
-        default: lib/main.dart
+        default: lib/main_with_go_router.dart
         options:
           - lib/main.dart
           - lib/main_with_go_router.dart
@@ -55,7 +55,7 @@ jobs:
         # Build the Flutter app for the web.
         run: |
           TARGET_FILE="${{ github.event.inputs.target }}"
-          flutter build web --base-href="/${{ github.event.repository.name }}/" --target="${TARGET_FILE:-lib/main.dart}"
+          flutter build web --base-href="/${{ github.event.repository.name }}/" --target="${TARGET_FILE:-lib/main_with_go_router.dart}"
         working-directory: example
 
       - name: 🚀 Deploy to GitHub Pages

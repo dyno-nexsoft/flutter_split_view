@@ -1,27 +1,26 @@
 import 'package:flutter/widgets.dart';
 
 mixin FlutterSplitHandler<T extends StatefulWidget> on State<T> {
-  final isSplit = ValueNotifier<bool>(false);
+  bool _isSplit = false;
+
+  bool get isSplit => _isSplit;
 
   double get breakpoint;
 
   bool canPop();
 
+  @protected
   Widget buildPrimary(BuildContext context);
 
+  @protected
   Widget buildSecondary(BuildContext context);
 
-  @override
-  void dispose() {
-    isSplit.dispose();
-    super.dispose();
-  }
-
+  @protected
   Widget buildSplit(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      isSplit.value = constraints.maxWidth > breakpoint;
+      _isSplit = constraints.maxWidth > breakpoint;
       final double primaryWidth, secondaryLeft, secondaryWidth;
-      if (isSplit.value) {
+      if (isSplit) {
         primaryWidth = breakpoint / 2;
         secondaryLeft = primaryWidth;
         secondaryWidth = constraints.maxWidth - primaryWidth;
@@ -44,7 +43,7 @@ mixin FlutterSplitHandler<T extends StatefulWidget> on State<T> {
             height: constraints.maxHeight,
             child: MediaQuery.removePadding(
               context: context,
-              removeRight: isSplit.value,
+              removeRight: isSplit,
               child: buildPrimary(context),
             ),
           ),
@@ -54,7 +53,7 @@ mixin FlutterSplitHandler<T extends StatefulWidget> on State<T> {
             height: constraints.maxHeight,
             child: MediaQuery.removePadding(
               context: context,
-              removeLeft: isSplit.value,
+              removeLeft: isSplit,
               child: buildSecondary(context),
             ),
           ),

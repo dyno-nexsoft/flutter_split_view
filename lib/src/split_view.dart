@@ -86,7 +86,7 @@ class FlutterSplitView extends Navigator {
   /// final isSplit = FlutterSplitView.isSplitOf(context);
   /// ```
   static bool isSplitOf(BuildContext context) {
-    return _of(context).isSplit.value;
+    return _of(context).isSplit;
   }
 }
 
@@ -131,13 +131,13 @@ class _FlutterSplitViewState extends NavigatorState with FlutterSplitHandler {
               Animation<double> animation,
               Animation<double> secondaryAnimation,
             ) {
-              return ValueListenableBuilder<bool>(
-                valueListenable: isSplit,
-                builder: (context, value, child) {
-                  if (value) return child!;
+              return Builder(
+                builder: (context) {
+                  if (FlutterSplitView.isSplitOf(context)) {
+                    return widget.placeholder;
+                  }
                   return const SizedBox.shrink();
                 },
-                child: widget.placeholder,
               );
             },
           )
